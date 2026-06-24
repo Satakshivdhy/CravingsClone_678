@@ -17,13 +17,13 @@ const Register = () => {
           <input type="radio" name='user' value='rider'/><span>Rider</span>
           </div>
           
-          <input type="text" placeholder='Enter your full name' />
+          <input type="text" placeholder='Enter your full name' className='p-2 border-[#F2EBE3] rounded border-1 active:border-[var(--accent)]'/>
           <input type="email" placeholder='Enter your email' />
           <input type="text" placeholder='Enter your phone number' />
           <input type="password" placeholder='Enter your password' />
           <input type="password" placeholder='Confirm your password' />
           <div><input type="checkbox"/><span>I agree to the terms and conditions.</span></div>
-          <button>Register</button>
+          <button className='w-full bg-(--primary) rounded p-3'>Register</button>
           <div>Already registered?<span>Login here</span></div>
         </form>
       </div>
