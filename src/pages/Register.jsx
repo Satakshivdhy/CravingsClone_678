@@ -30,7 +30,7 @@ const Register = () => {
           <input type="password" placeholder='Confirm your password' className='p-1.5 border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none' />
           <div className='py-2'><input type="checkbox"/><span className='text-gray-500'> I agree to the <Link className='text-(--primary) hover:underline'>terms and conditions.</Link> </span></div>
           <button className='w-full bg-(--primary) rounded-[7px] p-3 text-white font-bold'>Register</button>
-          <div className="text-center text-gray-500">Already registered?<Link to="/login" className='text-(--primary) text-semibold '> Login here</Link ></div>
+          <div className="text-center text-gray-500">Already registered?<Link to="/login" className='text-(--primary) text-semibold hover:underline'> Login here</Link ></div>
         </div>
         </form>
       </div>

@@ -1,7 +1,7 @@
 // import { useState } from "react";
 import React ,{useState} from "react";
 import foodTable from "../assets/foodTable.webp";
-
+import { Link } from "react-router-dom";
 
 // export default Login;
 
@@ -62,8 +62,8 @@ password: loginData.password,
 return (
 <>
 <div className="  bg-amber-400 "><img src={foodTable} alt="" className="h-[90vh] w-full object-cover" /></div>
-<div className="h-[70vh] text-[#6B7280]  absolute top-35 left-35">
-<div className="w-md bg-(--background) rounded-[10px] shadow px-10 py-7 flex flex-col justify-center gap-3">
+<div className="h-[70vh] text-[#6B7280]  absolute top-35 left-30">
+<div className="w-md bg-white rounded-[10px] shadow px-10 py-7 flex flex-col justify-center gap-3">
 <div className="flex flex-col items-center gap-3">
 <div className="text-3xl text-orange-700 font-bold ">Welocome Back!</div>
 <div>Login to your Cravings account</div>
@@ -72,7 +72,7 @@ return (
 <form onSubmit={handleSubmit}>
   <div className="flex flex-col gap-3">
 <div className="flex flex-col gap-2">
-<label htmlFor="email" className="text-black">Email</label>
+<label htmlFor="email" className="text-black font-semibold">Email</label>
 <input
 type="email"
 id="email"
@@ -80,7 +80,7 @@ name="email"
 placeholder="Enter your email"
 value={loginData.email}
 onChange={handleChange}
-className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
+className="border border-[#d7d1cb] p-1.5 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
 />
               {
                 validateError?.emailError && (
@@ -91,7 +91,7 @@ className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--acce
               }
 </div>
 <div className="flex flex-col gap-2 mt-4">
-<label htmlFor="password" className="text-black">Password</label>
+<label htmlFor="password" className="text-black font-semibold">Password</label>
 <input
 type="password"
 id="password"
@@ -99,7 +99,7 @@ name="password"
 placeholder="Enter your password"
 value={loginData.password}
 onChange={handleChange}
-className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
+className="border border-[#d7d1cb] p-1.5 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
 />
               {
                 validateError?.passwordError && (
@@ -120,14 +120,14 @@ className="mt-6  bg-orange-700 text-white font-bold py-3 px-4 rounded hover:bg-(
 Login
 </button>
 
-<div className="flex items-center">
-  <div className="h-[1px] w-[30%] bg-[#6B7280]"></div>
+<div className="flex items-center justify-between">
+  <div className="h-[1px] w-[25%] bg-[#c2c4c7]"></div>
   <div className="text-[#6B7280]">Don't Have account?</div>
-  <div className="h-[1px] w-[30%] bg-[#6B7280]"></div>
+  <div className="h-[1px] w-[25%] bg-[#c2c4c7]  "></div>
 
   <div></div>
 </div>
-<div className="text-orange-700 flex justify-center"> <p>Create an acount</p></div>
+<div className="text-orange-700 flex justify-center font-semibold hover:underline"> <Link to="/register">Create an acount</Link></div>
 </div>
 </form>
 </div>
