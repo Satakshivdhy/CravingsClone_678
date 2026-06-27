@@ -1,0 +1,26 @@
+import dotenv from "dotenv";
+dotenv.config();
+import express from  "express";
+import connectDB from "./src/config/dbConnection.config.js";
+const app = express();
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  console.log("Server Started Default Get API hit");
+  res.json({ message: "Welcome to my first backend project" });
+});
+
+app.use((err,req,res,next)=>{
+  const ErrMessage = err.message || "Internal Server Error";
+  const ErrStatusCode = err.statusCode || 500;
+
+  res.status(ErrStatusCode).json({message:"Internal Server Error"})
+})
+
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log("Server Started at port :", port);
+  connectDB()
+});
