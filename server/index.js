@@ -2,13 +2,18 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from  "express";
 import connectDB from "./src/config/dbConnection.config.js";
-import morgon from "morgon";
+import AuthRouter from "./src/routers/auth.route.js";
+import PublicRouter from "./src/routers/public.route.js"
+import morgan from "morgan";
 import cors from "cors";
 const app = express();
 
 app.use(cors({ origin: "http://localhost:5173"}))
 app.use(express.json());
 app.use(morgan('dev'));
+
+app.use("/auth",AuthRouter);
+app.use("/public",PublicRouter);
 
 app.get("/", (req, res) => {
   console.log("Server Started Default Get API hit");
