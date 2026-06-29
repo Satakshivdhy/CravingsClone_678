@@ -24,35 +24,36 @@ const Register = () => {
     console.log(registerData);
   };
 
-  const validateRegisterData = (data) => {
-    const { fullName, email, phone, gender, dob, password,confirmPassword } = data;
-    let errorMessage = {};
+  // const validateRegisterData = (data) => {
+  //   const { fullName, email, phone, gender, dob, password,confirmPassword } = data;
+  //   let errorMessage = {};
 
-    if (!fullName || !email || !password || !phone || !gender || !dob) {
-      errorMessage.fieldsError = "All Fields Required";
-    }
-    if (email.length < 8) {
-      errorMessage.emailError = "Email too Short";
-    }
-    if (password.length < 6) {
-      errorMessage.passwordError = "Password too Short";
-    }
-    if(password!== confirmPassword){
-      errorMessage.confirmPasswordError = "Passwords do not match"; 
-    }
+  //   if (!fullName || !email || !password || !phone || !gender || !dob) {
+  //     errorMessage.fieldsError = "All Fields Required";
+  //   }
+  //   if (email.length < 8) {
+  //     errorMessage.emailError = "Email too Short";
+  //   }
+  //   if (password.length < 6) {
+  //     errorMessage.passwordError = "Password too Short";
+  //   }
+  //   if(password!== confirmPassword){
+  //     errorMessage.confirmPasswordError = "Passwords do not match"; 
+  //   }
 
-    return Object.keys(errorMessage).length > 0 ? false : errorMessage;
-  };
+  //   return Object.keys(errorMessage).length > 0 ? false : errorMessage;
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validateResult = validateRegisterData(registerData);
-    if (!validateResult) {
-      setValidateError(validateResult);
+    if (registerData.password !== registerData.confirmPassword) {
+      setValidateError({ passwordError: "Passwords do not match" });
       return;
     }
+    setValidateError(null); // Clear previous errors if passwords match
     console.log("Registered data submitted:", registerData);
+    
     const payload = {
       fullName: registerData.fullName,
       email: registerData.email.toLowerCase(),
@@ -60,7 +61,6 @@ const Register = () => {
       gender: registerData.gender,
       dob: registerData.dob,
       password: registerData.password,
-      confirmPassword: registerData.password,
     };
     try {
       const res = await api.post("/auth/register", payload);
@@ -69,6 +69,7 @@ const Register = () => {
       console.log(res?.data?.message || error.message);
     }
   };
+  const inputClass= "p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none";
 
   return (
     <>
@@ -119,7 +120,7 @@ const Register = () => {
                     value={registerData.fullName}
                     placeholder="Enter your full name"
                     onChange={handleChange}
-                    className="p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none "
+                    className="{inputClass} "
                   />
                 </div>
                 <div className="w-full">
@@ -129,7 +130,7 @@ const Register = () => {
                     placeholder="Enter your email"
                     value={registerData.email}
                     onChange={handleChange}
-                    className="p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none"
+                    className="{inputClass}"
                   />
                   {validateError?.emailError && (
                     <span className="text-red-500 text-sm">
@@ -139,12 +140,12 @@ const Register = () => {
                 </div>
                 <div>
                   <input
-                    type="text"
+                    type="tel"
                     name="phone"
                     value={registerData.phone}
                     onChange={handleChange}
                     placeholder="Enter your phone number"
-                    className="p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none"
+                    className="{inputClass}"
                   />
                 </div>
                 <div>
@@ -170,7 +171,7 @@ const Register = () => {
                     name="dob"
                     value={registerData.dob}
                     onChange={handleChange}
-                    className="p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none text-[#6B7280]"
+                    className="{inputClass} text-[#6B7280]"
                   />
                 </div>
                 <div>
@@ -181,7 +182,7 @@ const Register = () => {
                     placeholder="Enter your password"
                     value={registerData.password}
                     onChange={handleChange}
-                    className="p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none"
+                    className="{inputClass}"
                   />
                   {validateError?.passwordError && (
                     <span className="text-red-500 text-sm">
@@ -196,7 +197,7 @@ const Register = () => {
                     value={registerData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Confirm your password"
-                    className="p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none"
+                    className="{inputClass}"
                   />
                   {validateError?.passwordError && (
                     <span className="text-red-500 text-sm">
