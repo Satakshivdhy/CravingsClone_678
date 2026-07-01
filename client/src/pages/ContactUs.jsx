@@ -1,6 +1,7 @@
 import React from "react";
 import contactPage from "../assets/contactPage.jpg";
 const ContactUs = () => {
+  // const [contact, setContact]
   return (
     <>
       <>

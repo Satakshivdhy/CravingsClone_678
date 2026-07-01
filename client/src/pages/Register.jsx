@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import foodTable from "../assets/foodTable.webp";
 import { Link } from "react-router-dom";
 import api from "../config/api.config.js";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -24,26 +25,7 @@ const Register = () => {
     console.log(registerData);
   };
 
-  // const validateRegisterData = (data) => {
-  //   const { fullName, email, phone, gender, dob, password,confirmPassword } = data;
-  //   let errorMessage = {};
-
-  //   if (!fullName || !email || !password || !phone || !gender || !dob) {
-  //     errorMessage.fieldsError = "All Fields Required";
-  //   }
-  //   if (email.length < 8) {
-  //     errorMessage.emailError = "Email too Short";
-  //   }
-  //   if (password.length < 6) {
-  //     errorMessage.passwordError = "Password too Short";
-  //   }
-  //   if(password!== confirmPassword){
-  //     errorMessage.confirmPasswordError = "Passwords do not match"; 
-  //   }
-
-  //   return Object.keys(errorMessage).length > 0 ? false : errorMessage;
-  // };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -64,9 +46,9 @@ const Register = () => {
     };
     try {
       const res = await api.post("/auth/register", payload);
-      alert(res.data.message);
+      toast.success(res.data.message);
     } catch (error) {
-      console.log(res?.data?.message || error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
   const inputClass= "p-1.5 w-full border-[#F2EBE3] rounded-[7px] border focus:border-3 focus:border-orange-700 focus:ring-0 focus:outline-none";

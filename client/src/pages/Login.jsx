@@ -1,14 +1,16 @@
 // import { useState } from "react";
 import React, { useState } from "react";
 import foodTable from "../assets/foodTable.webp";
-import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import api from "../config/api.config";
+import toast from "react-hot-toast";
 // export default Login;
 
 // import React, { useState } from "react";
 // import deliveryboy from "../assets/deliberyboy.png";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -21,34 +23,16 @@ const Login = () => {
     const value = e.target.value;
 
     setLoginData((prevData) => ({ ...prevData, [name]: value }));
-    console.log(loginData);
+    // console.log(loginData);
   };
 
-  const validateLoginData = (data) => {
-    const { email, password } = data;
-
-    let errorMessage = {};
-
-    if (email.length < 8) {
-      errorMessage.emailError = "Email too Short";
-    }
-    if (password.length < 6) {
-      errorMessage.passwordError = "Password too Short";
-    }
-
-    return Object.keys(errorMessage).length > 0 ? false : errorMessage;
-  };
-
+  console.log("q");
+  
+  console.log("w");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here, e.g., send loginData to the server
-    //Validate loginData
-
-    const validateResult = validateLoginData(loginData);
-    if (!validateResult) {
-      setValidateError(validateResult);
-      return;
-    }
+   
+    console.log("x");
 
     console.log("Login data submitted:", loginData);
 
@@ -56,6 +40,16 @@ const Login = () => {
       email: loginData.email.toLowerCase(),
       password: loginData.password,
     };
+    try {
+      const res = await api.post("/auth/login", payload);
+      toast.success(res.data.message);
+      // toast.success(res.data.data.fullName);
+      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
+      navigate("/user/dashboard");
+      toast.success("sucessfully Logged in");
+    } catch (error) {
+      toast.error(error.response.status + "|" + error.response?.data?.message || error.message);
+    }
   };
 
   return (
@@ -137,7 +131,7 @@ const Login = () => {
               </div>
               <div className="text-orange-700 flex justify-center font-semibold hover:underline">
                 {" "}
-                <Link to="/register">Create an acount</Link>
+                {/* <Link to="/register">Create an acount</Link> */}
               </div>
             </div>
           </form>
