@@ -2,24 +2,29 @@ import React, { useState } from "react";
 import contactPage from "../assets/contactPage.jpg";
 import api from "../config/api.config.js";
 import toast from "react-hot-toast";
-import { useNavigate,} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
-
 
 const ContactUs = () => {
   // const [contact, setContact]
   const [contactData, setContactData] = useState({
-      fullName: "",
-      email: "",
-      phone: "",
-      subject:"",
-      message:"",
-  
-    });
+    fullName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
 
-    const handleSubmit = async (e) => {
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setContactData((prevData) => ({ ...prevData, [name]: value }));
+    console.log(contactData);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const payload = {
       fullName: contactData.fullName,
       email: contactData.email.toLowerCase(),
@@ -54,33 +59,48 @@ const ContactUs = () => {
               </p>
             </div>
 
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={handleSubmit}>
               <input
                 type="text"
+                name="fullName"
+                value={contactData.fullName}
                 placeholder="Enter your full name"
+                onChange={handleChange}
                 className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-400"
               />
 
               <input
                 type="email"
+                name="email"
+                value={contactData.email}
+                onChange={handleChange}
                 placeholder="Enter your email"
                 className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-400"
               />
 
               <input
-                type="text"
+                type="tel"
+                name="phone"
+                value={contactData.phone}
+                onChange={handleChange}
                 placeholder="Enter phone number"
                 className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-400"
               />
 
               <input
                 type="text"
+                name="subject"
+                value={contactData.subject}
+                onChange={handleChange}
                 placeholder="What is this about?"
                 className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-400"
               />
 
               <textarea
                 rows="5"
+                name="message"
+                value={contactData.message}
+                onChange={handleChange}
                 placeholder="Write your message here..."
                 className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-400"
               ></textarea>
