@@ -1,7 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import contactPage from "../assets/contactPage.jpg";
+import api from "../config/api.config.js";
+import toast from "react-hot-toast";
+import { useNavigate,} from "react-router-dom";
+// import { useState } from "react";
+
+
 const ContactUs = () => {
   // const [contact, setContact]
+  const [contactData, setContactData] = useState({
+      fullName: "",
+      email: "",
+      phone: "",
+      subject:"",
+      message:"",
+  
+    });
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const payload = {
+      fullName: contactData.fullName,
+      email: contactData.email.toLowerCase(),
+      phone: contactData.phone,
+      subject: contactData.subject,
+      message: contactData.message,
+    };
+    try {
+      const res = await api.post("/public/contact-us", payload);
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
   return (
     <>
       <>
