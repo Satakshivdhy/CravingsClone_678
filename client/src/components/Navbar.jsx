@@ -23,7 +23,7 @@ const Navbar = () => {
         <div className="flex gap-3 items-center pr-4">
           {/* <Link to='/'> Home</Link> */}
           {isLogin ? (
-            <div className="border-s-2 flex justify-center items-center gap-4 px-4">
+            <div className=" flex justify-center items-center gap-4 ">
               <div className="w-8 h-8 rounded-full overflow-hidden">
                 <img
                   src={user.photo}
@@ -33,14 +33,14 @@ const Navbar = () => {
               </div>
               <Link
                 to={"/user/dashboard"}
-                className="hover:underline hover:text-(--accent) text-white"
+                className="hover:shadow-2xs  text-white"    //hover:text-(--accent)
 
 >
                 {user.fullName.toUpperCase()}
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-red-300 hover:text-red-600 flex items-center"
+                className="text-red-300 hover:text-red-500 flex items-center"
               > <p>Logout</p>
                 <AiOutlineLogout />
               </button>

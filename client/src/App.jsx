@@ -7,7 +7,7 @@ import Register from './pages/Register';
 import ContactUs from './pages/ContactUs';
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import {Toaster} from 'react-hot-toast';
-import UserDashboard from './pages/dashboard/userDashboard';
+import UserDashboard from './pages/dashboard/UserDashboard';
 
 const App = () => {
   return (
