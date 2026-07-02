@@ -1,29 +1,67 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import { useEffect , useState} from "react";
-import transparentLogo from "../assets/transparentLogo.png"
-
+import { Link, useNavigate } from "react-router-dom";
+// import { useEffect , useState} from "react";
+import transparentLogo from "../assets/transparentLogo.png";
+import { useAuth } from "../context/AuthContext";
+import { AiOutlineLogout } from "react-icons/ai";
 const Navbar = () => {
-  const [userData, setUserData] = useState("");
-   useEffect(() => {
-      setUserData(JSON.parse(sessionStorage.getItem("UserData")));
-    }, []);
+  const { user, setUser, isLogin, setIsLogin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("UserData");
+    setIsLogin(false);
+    setUser(false);
+    navigate("/");
+  };
   return (
     <>
       <div className="h-16 bg-[#C2410C] relative px-12 flex items-center justify-between sticky top-0 z-999">
-        <Link to='/' ><img src={transparentLogo} alt="" className="abosolute w-22" /></Link>
+        <Link to="/">
+          <img src={transparentLogo} alt="" className="abosolute w-22" />
+        </Link>
         <div className="flex gap-3 items-center pr-4">
-            {/* <Link to='/'> Home</Link> */}
-            <Link to='/login' className="text-white px-2.5 py-1 hover:border hover:rounded"> Login</Link>
-            <Link to='/register' className="text-[#C2410C] bg-amber-50 px-3 py-1 border rounded hover:border-white hover:bg-[#C2410C] hover:text-white">Register</Link>
-            {/* <Link to='/contact-us'>Contact Us</Link> */}
-            {/* <div className="w-15 h-15 rounded-full overflow-hidden">
-        <img
-          src={userData.photo}
-          alt=""
-          className="w-full h-full object-cover"
-        />
-      </div> */}
+          {/* <Link to='/'> Home</Link> */}
+          {isLogin ? (
+            <div className="border-s-2 flex justify-center items-center gap-4 px-4">
+              <div className="w-8 h-8 rounded-full overflow-hidden">
+                <img
+                  src={user.photo}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <Link
+                to={"/user/dashboard"}
+                className="hover:underline hover:text-(--accent) text-white"
+
+>
+                {user.fullName.toUpperCase()}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="text-red-300 hover:text-red-600 flex items-center"
+              > <p>Logout</p>
+                <AiOutlineLogout />
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="text-white px-2.5 py-1 hover:border hover:rounded"
+              >
+                {" "}
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="text-[#C2410C] bg-amber-50 px-3 py-1 border rounded hover:border-white hover:bg-[#C2410C] hover:text-white"
+              >
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </>
@@ -31,4 +69,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

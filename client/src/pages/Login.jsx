@@ -4,12 +4,14 @@ import foodTable from "../assets/foodTable.webp";
 import { useNavigate } from "react-router-dom";
 import api from "../config/api.config";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 // export default Login;
 
 // import React, { useState } from "react";
 // import deliveryboy from "../assets/deliberyboy.png";
 
 const Login = () => {
+  const {setUser,setIsLogin,isLogin} = useAuth();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
@@ -27,13 +29,10 @@ const Login = () => {
   };
 
   console.log("q");
-  
-  console.log("w");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
    
-    console.log("x");
-
     console.log("Login data submitted:", loginData);
 
     const payload = {
@@ -45,8 +44,9 @@ const Login = () => {
       toast.success(res.data.message);
       // toast.success(res.data.data.fullName);
       sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
+      setUser(res.data.data);
+      setIsLogin(true);
       navigate("/user/dashboard");
-      toast.success("sucessfully Logged in");
     } catch (error) {
       toast.error(error.response.status + "|" + error.response?.data?.message || error.message);
     }
