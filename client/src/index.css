@@ -16,3 +16,7 @@
 
   --primary-text: #FFFFFF;
 }
+
+button{
+  cursor: pointer;
+}

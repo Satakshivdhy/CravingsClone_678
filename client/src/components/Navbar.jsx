@@ -1,18 +1,28 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { useEffect , useState} from "react";
 import transparentLogo from "../assets/transparentLogo.png";
 import { useAuth } from "../context/AuthContext";
 import { AiOutlineLogout } from "react-icons/ai";
+import api from "../config/api.config.js";
+import toast from "react-hot-toast";
 const Navbar = () => {
   const { user, setUser, isLogin, setIsLogin } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("UserData");
-    setIsLogin(false);
-    setUser(false);
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      const res = await api.get("/auth/logout");
+      sessionStorage.removeItem("UserData");
+      setIsLogin(false);
+      setUser(false);
+      navigate("/");
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(
+        error.response.status + " | " + error.response?.data?.message ||
+          error.message,
+      );
+    }
   };
   return (
     <>
@@ -33,15 +43,16 @@ const Navbar = () => {
               </div>
               <Link
                 to={"/user/dashboard"}
-                className="hover:shadow-2xs  text-white"    //hover:text-(--accent)
-
->
+                className="hover:shadow-2xs  text-white" //hover:text-(--accent)
+              >
                 {user.fullName.toUpperCase()}
               </Link>
               <button
                 onClick={handleLogout}
                 className="text-red-300 hover:text-red-500 flex items-center"
-              > <p>Logout</p>
+              >
+                {" "}
+                <p>Logout</p>
                 <AiOutlineLogout />
               </button>
             </div>
