@@ -5,9 +5,24 @@ import toast from "react-hot-toast";
 
 const Settings = () => {
   const { user, setUser } = useAuth();
-  
   const [isEditable, setIsEditable] = useState(false);
-  const [tempUser, setTempUser] = useState(user);
+  const [tempUser, setTempUser] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    photo: "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      setTempUser({
+        fullName: user.fullName || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        photo: user.photo || "",
+      });
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,86 +30,130 @@ const Settings = () => {
   };
 
   const handleSave = async () => {
-    setIsEditable(false);
-
     const payload = {
       email: tempUser.email.toLowerCase(),
       fullName: tempUser.fullName,
       phone: tempUser.phone,
     };
 
-    console.log(payload);
-
     try {
       const res = await api.put("/user/edit-profile", payload);
       setUser(res.data.data);
       toast.success(res.data.message);
+      setIsEditable(false);
     } catch (error) {
       toast.error(
-        error.response.status + "|" + error.reponse?.data?.message ||
-          error.message,
+        `${error.response?.status || "Error"} | ${
+          error.response?.data?.message || error.message
+        }`,
       );
     }
   };
 
-  return (
-    <>
-      
-        <div className="w-24 h-24 rounded-full overflow-hidden">
-          <img src={user.photo} alt="" className="w-full h-full object-cover" />
-        </div>
-        {isEditable === true ? (
-        <>
-          <div className="grid w-sm gap-3">
-            <input
-              type="text"
-              name="fullName"
-              value={tempUser.fullName}
-              className="border p-2"
-              onChange={handleChange}
-            />
-            <input
-              type="email"
-              name="email"
-              value={tempUser.email}
-              className="border p-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
-              disabled
-            />
-            <input
-              type="number"
-              name="phone"
-              value={tempUser.phone}
-              className="border p-2"
-              onChange={handleChange}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          <div>
-            <div>{user.fullName}</div>
-            <div>{user.email}</div>
-            <div>{user.phone}</div>
-          </div>
-        </>
-      )}
+  if (!user) {
+    return (
+      <div className="rounded-[2rem] bg-white p-8 shadow-sm">
+        <p className="text-slate-600">Loading profile...</p>
+      </div>
+    );
+  }
 
-      {isEditable === true ? (
-        <>
-          <button onClick={() => setIsEditable(false)} className="border p-3 ">
-            Cancel
+  return (
+    <div className="rounded-[2rem] bg-white p-8 shadow-sm">
+      <div className="mb-8 flex flex-col gap-5 rounded-[2rem] border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center">
+        <div className="flex-shrink-0 rounded-full border border-slate-200 bg-slate-100 p-1">
+          <div className="h-28 w-28 overflow-hidden rounded-full bg-slate-200">
+            {tempUser.photo ? (
+              <img
+                src={tempUser.photo}
+                alt={tempUser.fullName}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-4xl text-orange-600">
+                👤
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-3 text-slate-700">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-600">
+            Profile settings
+          </p>
+          <h1 className="text-3xl font-semibold text-slate-900">{tempUser.fullName || "Your Name"}</h1>
+          <p className="max-w-2xl text-sm leading-6 text-slate-500">
+            Update your account details and contact information. Your email cannot be changed here.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        <label className="space-y-2 text-sm font-medium text-slate-700">
+          Full name
+          <input
+            type="text"
+            name="fullName"
+            value={tempUser.fullName}
+            onChange={handleChange}
+            disabled={!isEditable}
+            className="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm transition focus:border-orange-400 focus:outline-none"
+          />
+        </label>
+
+        <label className="space-y-2 text-sm font-medium text-slate-700">
+          Email address
+          <input
+            type="email"
+            name="email"
+            value={tempUser.email}
+            disabled
+            className="w-full rounded-3xl border border-slate-200 bg-slate-100 px-4 py-3 text-slate-500 shadow-sm"
+          />
+        </label>
+
+        <label className="space-y-2 text-sm font-medium text-slate-700 sm:col-span-2">
+          Phone number
+          <input
+            type="tel"
+            name="phone"
+            value={tempUser.phone}
+            onChange={handleChange}
+            disabled={!isEditable}
+            className="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm transition focus:border-orange-400 focus:outline-none"
+          />
+        </label>
+      </div>
+
+      <div className="mt-8 flex flex-wrap gap-3">
+        {isEditable ? (
+          <>
+            <button
+              type="button"
+              onClick={() => setIsEditable(false)}
+              className="rounded-3xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              className="rounded-3xl bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
+            >
+              Save changes
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsEditable(true)}
+            className="rounded-3xl bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
+          >
+            Edit profile
           </button>
-          <button onClick={handleSave} className="border p-3 ">
-            Save
-          </button>
-        </>
-      ) : (
-        <button onClick={() => setIsEditable(true)} className="border p-3 ">
-          Edit
-        </button>
-      )}
-     
-    </>
+        )}
+      </div>
+    </div>
   );
 };
 
