@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../config/api.config.js";
 import toast from "react-hot-toast";
+import { MdOutlineAddAPhoto } from "react-icons/md";
 
 const Settings = () => {
   const { user, setUser } = useAuth();
   const [isEditable, setIsEditable] = useState(false);
+  const [profilePicPreview, setProfilePicPreview] = useState(null);
   const [tempUser, setTempUser] = useState({
     fullName: "",
     email: "",
@@ -36,6 +38,8 @@ const Settings = () => {
       phone: tempUser.phone,
     };
 
+   
+
     try {
       const res = await api.put("/user/edit-profile", payload);
       setUser(res.data.data);
@@ -57,15 +61,23 @@ const Settings = () => {
       </div>
     );
   }
+   const handleProfilePicChange = (e) => {
+      const file = e.target.files[0];
+      const fileURL = URL.createObjectURL(file);
+
+      console.log(file);
+      console.log(fileURL);
+      setProfilePicPreview(fileURL);
+    };
 
   return (
     <div className="rounded-[2rem] bg-white p-8 shadow-sm">
       <div className="mb-8 flex flex-col gap-5 rounded-[2rem] border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center">
-        <div className="flex-shrink-0 rounded-full border border-slate-200 bg-slate-100 p-1">
+        <div className="flex-shrink-0 relative rounded-full border border-slate-200 bg-slate-100 p-1">
           <div className="h-28 w-28 overflow-hidden rounded-full bg-slate-200">
             {tempUser.photo ? (
               <img
-                src={tempUser.photo}
+                src={profilePicPreview || tempUser.photo}
                 alt={tempUser.fullName}
                 className="h-full w-full object-cover"
               />
@@ -75,15 +87,34 @@ const Settings = () => {
               </div>
             )}
           </div>
+          <div>
+          <label
+            htmlFor="profilePic"
+            className="cursor-pointer text-2xl absolute right-4 bottom-1 text-mist-600 hover:text-black "
+            title="Change Photo"
+          >
+            <MdOutlineAddAPhoto />
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            name="profilePic"
+            id="profilePic"
+            className="hidden"
+            disabled={!isEditable}
+            onChange={handleProfilePicChange}
+          /></div>
         </div>
-
         <div className="space-y-3 text-slate-700">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-600">
-            Profile settings
+            Profile
           </p>
-          <h1 className="text-3xl font-semibold text-slate-900">{tempUser.fullName || "Your Name"}</h1>
+          <h1 className="text-3xl font-semibold text-slate-900">
+            {tempUser.fullName || "Your Name"}
+          </h1>
           <p className="max-w-2xl text-sm leading-6 text-slate-500">
-            Update your account details and contact information. Your email cannot be changed here.
+            Update your account details and contact information. Your email
+            cannot be changed here.
           </p>
         </div>
       </div>
