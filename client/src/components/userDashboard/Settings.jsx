@@ -8,6 +8,8 @@ const Settings = () => {
   const { user, setUser } = useAuth();
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
+  const [profilePic, setProfilePic] = useState(null);
+   const [isLoading, setIsLoading] = useState(false);
   const [tempUser, setTempUser] = useState({
     fullName: "",
     email: "",
