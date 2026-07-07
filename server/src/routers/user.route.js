@@ -6,6 +6,6 @@ import { AuthProtect } from "../middlewares/auth.middleware.js";
 const Upload = multer();
 const router = express.Router();
 
-router.put("/edit-profile", AuthProtect,Upload.single("displayPic"), EditUserProfile);
+router.put("/edit-profile", AuthProtect,Upload.single("photo"), EditUserProfile);
 
 export default router;
