@@ -35,6 +35,7 @@ const Settings = () => {
       }
 
       const res = await api.put(`/user/edit-profile`, payload);
+      console.log("Updated User:", res.data.data);
       setUser(res.data.data);
       sessionStorage.setItem("cravingUser", JSON.stringify(res.data.data));
       setIsEditable(false);
