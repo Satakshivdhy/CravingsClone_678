@@ -22,6 +22,7 @@ export const EditUserProfile = async (req, res, next) => {
     }
 
     if (newPhoto) {
+      existingUser?.photo?.publicId &&( await cloudinary.uploader.destroy(existingUser.photo.publicId));
       const b64 = Buffer.from(newPhoto.buffer).toString("base64");
       const dataURI = `data:${newPhoto.mimetype};base64,${b64}`;
 
@@ -33,8 +34,8 @@ export const EditUserProfile = async (req, res, next) => {
       });
 
       console.log(result);
-      console.log(result.secure_url);
-      console.log(result.public_id);
+      existingUser.photo.url = result.secure_url;
+      existingUser.photo.publicId = result.public_id;
     }
 
     existingUser.fullName = fullName;
@@ -45,7 +46,8 @@ export const EditUserProfile = async (req, res, next) => {
       .status(200)
       .json({ message: "User Updated Successfully", data: existingUser });
   } catch (error) {
-    console.log(error.message);
-    next(error);
+    console.error(error);
+  return res.status(500).json({
+    message: error.message,});
   }
 };

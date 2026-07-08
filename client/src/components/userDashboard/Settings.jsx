@@ -6,56 +6,47 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 
 const Settings = () => {
   const { user, setUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
+
   const [tempUser, setTempUser] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    photo: "",
+    fullName: user?.fullName || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
   });
-
-  useEffect(() => {
-    if (user) {
-      setTempUser({
-        fullName: user.fullName || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        photo: user.photo || "",
-      });
-    }
-  }, [user]);
-
+  // Profile handlers
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTempUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
-    
-    const payload = new FormData();
-
-    payload.append("email", tempUser.email.toLowerCase());
-    payload.append("fullName", tempUser.fullName);
-    payload.append("phone",tempUser.phone);
-
-    if(profilePic){
-      payload.append("photo",profilePic);
-    }
-
-
     try {
-      const res = await api.put("/user/edit-profile", payload);
+      setIsLoading(true);
+
+       const payload = new FormData();
+      payload.append("fullName", tempUser.fullName);
+      payload.append("email", tempUser.email.toLowerCase());
+      payload.append("phone", tempUser.phone);
+      if (profilePic) {
+        payload.append("displayPic", profilePic);
+      }
+
+      const res = await api.put(`/user/edit-profile`, payload);
       setUser(res.data.data);
-      toast.success(res.data.message);
+      sessionStorage.setItem("cravingUser", JSON.stringify(res.data.data));
       setIsEditable(false);
+      toast.success("Profile updated successfully!");
     } catch (error) {
       toast.error(
-        `${error.response?.status || "Error"} | ${
-          error.response?.data?.message || error.message
+        `${error.res?.status || "Error"} | ${
+          error.res?.data?.message || error.message
         }`,
       );
+    } finally{
+      setIsLoading(false);
     }
   };
 
@@ -68,14 +59,10 @@ const Settings = () => {
   }
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
-    if(!file) return;
+    if (!file) return;
 
     setProfilePic(file);
-    const fileURL = URL.createObjectURL(file);
-
-    console.log(file);
-    console.log(fileURL);
-    setProfilePicPreview(fileURL);
+    setProfilePicPreview(URL.createObjectURL(file));
   };
 
   return (
@@ -83,10 +70,10 @@ const Settings = () => {
       <div className="mb-8 flex flex-col gap-5 rounded-[2rem] border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center">
         <div className="flex-shrink-0 relative rounded-full border border-slate-200 bg-slate-100 p-1">
           <div className="h-28 w-28 overflow-hidden rounded-full bg-slate-200">
-            {tempUser.photo ? (
+            {profilePicPreview || user.photo?.url ? (
               <img
-                src={profilePicPreview || tempUser.photo}
-                alt={tempUser.fullName}
+                src={profilePicPreview || user.photo?.url}
+                alt={user.fullName}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -95,21 +82,24 @@ const Settings = () => {
               </div>
             )}
           </div>
-          <label
-            htmlFor="profilePic"
-            className="cursor-pointer text-2xl absolute right-4 bottom-1 text-mist-600 hover:text-black "
-            title="Change Photo"
-          >
-            <MdOutlineAddAPhoto />
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            name="profilePic"
-            id="profilePic"
-            className="hidden"
-            onChange={handleProfilePicChange}
-          />
+              {isEditable && (
+                <div
+                  className="absolute cursor-pointer bottom-1 right-1 border p-2 rounded-full w-fit bg-(--color-base-200)"
+                  title="Change Photo"
+                >
+                  <label htmlFor="profilePic" className="cursor-pointer">
+                    <MdOutlineAddAPhoto className="text-xl" />
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="profilePic"
+                    id="profilePic"
+                    className="hidden"
+                    onChange={handleProfilePicChange}
+                  />
+                </div>
+              )}
         </div>
         <div className="space-y-3 text-slate-700">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-600">
@@ -169,6 +159,7 @@ const Settings = () => {
               type="button"
               onClick={() => setIsEditable(false)}
               className="rounded-3xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+              disabled={isLoading}
             >
               Cancel
             </button>
@@ -176,8 +167,9 @@ const Settings = () => {
               type="button"
               onClick={handleSave}
               className="rounded-3xl bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
-            >
-              Save changes
+              disabled={isLoading}
+           >
+              {isLoading? "saving ..." : "Save changes"}
             </button>
           </>
         ) : (
