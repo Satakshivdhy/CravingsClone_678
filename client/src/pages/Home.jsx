@@ -99,12 +99,12 @@ const Home = () => {
           <img
             src={bgImage1}
             alt="Hero"
-            className="w-full h-[650px] object-cover"
+            className="w-full h-[620px] object-cover"
           />
 
           <div className="absolute inset-0 bg-black/30"></div>
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-5">
+          <div className="absolute inset-0 h-[300px] top-30 flex flex-col items-center justify-center text-white text-center px-5">
             <h1 className="text-5xl font-bold mb-4">
               Your Favorite Food,
               <br />
@@ -119,31 +119,33 @@ const Home = () => {
             <div className="flex gap-5">
               <Link
                 to="/register"
-                className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold"
+                className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg font-semibold"
               >
                 Sign Up
               </Link>
 
               <Link
                 to="/order-now"
-                className="bg-white text-black hover:bg-gray-200 px-6 py-3 rounded-lg font-semibold"
+                className="bg-white text-black hover:bg-gray-200 px-8 py-3 rounded-lg font-semibold"
               >
                 Order Now
               </Link>
             </div>
-          </div>
+            {/* Search Box */}
 
-          {/* Search Box */}
-
-          <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 bg-white rounded-xl shadow-lg flex items-center px-5 py-4 w-11/12 max-w-2xl">
+          <div className="absolute bottom-[-45px] left-1/2 -translate-x-1/2 bg-[#FFF8F1] rounded-xl shadow-lg flex items-center px-5 py-3  w-[60%] text-red-200">
             <FaSearch className="text-gray-500 mr-3" />
 
             <input
               type="text"
               placeholder="Search restaurants or dishes..."
-              className="w-full outline-none"
+              className="w-full outline-none "
+              
+            
             />
           </div>
+          </div>
+
         </section>
 
         {/* Featured Restaurants */}
