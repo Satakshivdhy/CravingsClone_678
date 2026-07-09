@@ -7,11 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(!!user);
 
   useEffect(() => {
-    // if(user){
-    //     setIsLogin(true);
-    // }else{
-    //     setIsLogin(false);     
-    // }
+ 
     setIsLogin(!!user);
   }, [user]); // whenever the change in [user] , the function will run "useEffect()"
 

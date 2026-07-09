@@ -35,17 +35,12 @@ const Settings = () => {
       }
 
       const res = await api.put(`/user/edit-profile`, payload);
-      console.log("Updated User:", res.data.data);
       setUser(res.data.data);
-      sessionStorage.setItem("cravingUser", JSON.stringify(res.data.data));
+      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
       setIsEditable(false);
       toast.success("Profile updated successfully!");
     } catch (error) {
-      toast.error(
-        `${error.res?.status || "Error"} | ${
-          error.res?.data?.message || error.message
-        }`,
-      );
+      toast.error(error.response?.data?.message || "Failed to update profile");
     } finally{
       setIsLoading(false);
     }
@@ -60,7 +55,7 @@ const Settings = () => {
   }
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    // if (!file) return;
 
     setProfilePic(file);
     setProfilePicPreview(URL.createObjectURL(file));
