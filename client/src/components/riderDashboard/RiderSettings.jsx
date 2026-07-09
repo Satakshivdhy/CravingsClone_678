@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext.jsx";
 import api from "../../config/api.config.js";
 import toast from "react-hot-toast";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
-const Settings = () => {
+const RiderSettings = () => {
   const { user, setUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
@@ -182,4 +182,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default RiderSettings

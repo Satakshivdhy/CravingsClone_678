@@ -11,7 +11,7 @@ const MenuItems = [
   { name: "Settings", icon: <BsPersonGear /> },
 ];
 
-const Sidebar = ({ active, setActive }) => {
+const AdminSidebar = ({ active, setActive }) => {
   const { user } = useAuth();
   const userName = user?.fullName || "Hello User👋";
 
@@ -49,4 +49,4 @@ const Sidebar = ({ active, setActive }) => {
   );
 };
 
-export default Sidebar;
+export default AdminSidebar
