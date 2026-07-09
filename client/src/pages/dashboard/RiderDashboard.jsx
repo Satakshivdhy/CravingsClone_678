@@ -1,25 +1,47 @@
 import React from "react";
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import RiderOrders from "../../components/riderDashboard/RiderOrders";
 import RiderOverview from "../../components/riderDashboard/RiderOverview";
 import RiderSettings from "../../components/riderDashboard/RiderSettings";
 import RiderSidebar from "../../components/riderDashboard/RiderSidebar";
 import RiderWishList from "../../components/riderDashboard/RiderWishList";
-
+import { useLocation, useNavigate } from "react-router-dom";
 const RiderDashboard = () => {
-  const [active, setActive] = useState("Overview");
+   const { isLogin, role } = useAuth();
+  const navigate = useNavigate();
+  const active = useLocation().state?.activeTab;
+  const [activeTab, setActiveTab] = React.useState(active || "overview");
+
+  if (!isLogin || role !== "rider") {
+    return (
+      <div className="h-[92vh] bg-[url('/foodTable.webp')]  bg-cover bg-center">
+        <div className="h-full backdrop-blur-lg flex flex-col items-center justify-center ">
+          <h1 className="text-2xl font-bold text-(--color-neutral-content)">
+            Access Denied. Please log in as a Rider to view this page.
+          </h1>
+          <button
+            className="mt-4 px-4 py-2 bg-(--color-primary) text-white rounded-md"
+            onClick={() => navigate("/login")}
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="flex h-[92vh] gap-6 bg-slate-50">
-        <div className="w-72">
-          <RiderSidebar active={active} setActive={setActive} />
+      <div className="h-[92vh] flex gap-2 m-2">
+        <div className="w-3/17 bg-(--color-base-200) p-4 rounded-lg shadow-md h-full">
+          <RiderSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
-        <main className="flex-1 rounded-[2rem] bg-slate-50 p-6 shadow-sm">
-          {active === "Overview" && <RiderOverview />}
-          {active === "Orders" && <RiderOrders />}
-          {active === "Wishlist" && <RiderWishList />}
-          {active === "Settings" && <RiderSettings />}
-        </main>
+        <div className="w-14/17 bg-(--color-base-100) p-4 rounded-lg shadow-md h-full">
+          {activeTab === "overview" && <RiderOverview />}
+          {activeTab === "orders" && <RiderOrders />}
+          {activeTab === "settings" && <RiderSettings />}
+        </div>
       </div>
     </>
   );

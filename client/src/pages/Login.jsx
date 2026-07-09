@@ -1,7 +1,7 @@
 // import { useState } from "react";
 import React, { useState } from "react";
 import foodTable from "../assets/foodTable.webp";
-import { useNavigate } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import api from "../config/api.config";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
@@ -11,7 +11,7 @@ import { useAuth } from "../context/AuthContext";
 // import deliveryboy from "../assets/deliberyboy.png";
 
 const Login = () => {
-  const {setUser,setIsLogin,isLogin} = useAuth();
+  const {setUser,setIsLogin,isLogin, setRole} = useAuth();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
@@ -46,7 +46,14 @@ const Login = () => {
       sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
       setUser(res.data.data);
       setIsLogin(true);
-      navigate("/user/dashboard");
+
+      setRole(res.data.data.userType);
+      res.data.data.userType === "rider" && navigate("/rider-dashboard");
+
+      res.data.data.userType === "admin" && navigate("/admin-dashboard");
+
+      res.data.data.userType === "customer" && navigate("/customer-dashboard");
+      
     } catch (error) {
       toast.error(error.response.status + "|" + error.response?.data?.message || error.message);
     }

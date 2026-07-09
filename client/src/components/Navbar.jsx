@@ -6,8 +6,22 @@ import { AiOutlineLogout } from "react-icons/ai";
 import api from "../config/api.config.js";
 import toast from "react-hot-toast";
 const Navbar = () => {
-  const { user, setUser, isLogin, setIsLogin } = useAuth();
+  const { user, setUser, isLogin, setIsLogin, role, setRole } = useAuth();
   const navigate = useNavigate();
+
+ const handleNavigate = () => {
+    //console.log("Handle Navigate", role);
+
+    if (role === "restaurant") {
+      navigate("/restaurant-dashboard");
+    } else if (role === "rider") {
+      navigate("/rider-dashboard");
+    } else if (role === "admin") {
+      navigate("/admin-dashboard");
+    } else {
+      navigate("/customer-dashboard");
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -16,6 +30,7 @@ const Navbar = () => {
       setIsLogin(false);
       setUser(false);
       navigate("/");
+      setRole(null);
       toast.success(res.data.message);
     } catch (error) {
       toast.error(
@@ -46,6 +61,9 @@ const Navbar = () => {
                 className="hover:shadow-2xs  text-white" //hover:text-(--accent)
               >
                 {user.fullName.toUpperCase()}
+                <span className="text-xs text-(--color-primary-content)/80 uppercase">
+                  {role}
+                </span>
               </Link>
               <button
                 onClick={handleLogout}
