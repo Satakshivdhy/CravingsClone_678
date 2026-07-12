@@ -55,7 +55,11 @@ const Login = () => {
       res.data.data.userType === "customer" && navigate("/customer-dashboard");
       
     } catch (error) {
-      toast.error(error.response.status + "|" + error.response?.data?.message || error.message);
+      toast.error(
+    `${error.response?.status || "Error"} | ${
+      error.response?.data?.message || error.message
+    }`
+  );
     }
   };
 
