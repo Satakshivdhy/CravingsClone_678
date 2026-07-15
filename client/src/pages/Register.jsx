@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import foodTable from "../assets/foodTable.webp";
-import { Link } from "react-router-dom";
+import { Link ,useParams, useNavigate } from "react-router-dom";
 import api from "../config/api.config.js";
 import toast from "react-hot-toast";
 
 const Register = () => {
+  const userType = useParams().userType; 
+  const navigate = useNavigate();
   const [registerData, setRegisterData] = useState({
     fullName: "",
     email: "",
@@ -13,15 +15,17 @@ const Register = () => {
     dob: "",
     password: "",
     confirmPassword: "",
-
+    userType: userType || "customer",
+    agreeTerms: false,
   });
 
   const [validateError, setValidateError] = useState();
+  const [loading, setLoading] = useState(false);
+
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setRegisterData((prevData) => ({ ...prevData, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setRegisterData((prevData) => ({ ...prevData, [name]: type === "checkbox" ? checked : value,}));
     console.log(registerData);
   };
 

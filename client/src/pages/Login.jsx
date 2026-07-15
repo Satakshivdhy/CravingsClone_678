@@ -134,9 +134,9 @@ const Login = () => {
               </button>
 
               <div className="flex items-center justify-between">
-                <div className="h-[1px] w-[25%] bg-[#c2c4c7]"></div>
+                <div className="h-px w-[25%] bg-[#c2c4c7]"></div>
                 <div className="text-[#6B7280]">Don't Have account?</div>
-                <div className="h-[1px] w-[25%] bg-[#c2c4c7]  "></div>
+                <div className="h-px w-[25%] bg-[#c2c4c7]  "></div>
 
                 <div></div>
               </div>
